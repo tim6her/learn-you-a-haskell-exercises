@@ -1,7 +1,12 @@
 -- Raise x to the power y, using recursion
 -- For example, power 5 2 = 25
 power :: Int -> Int -> Int
-power x y = undefined
+power 0 0 = undefined
+power x 0 = 1
+power x y
+    | y < 0 = undefined
+    | x == 0 = 0
+    | otherwise = x * (power x (y - 1))
 
 -- create a list of length n of the fibbonaci sequence in reverse order
 -- examples: fib 0 = [0]
@@ -9,7 +14,11 @@ power x y = undefined
 --	     fib 10 = [55,34,21,13,8,5,3,2,1,1,0]	
 -- try to use a where clause
 fib :: (Num a, Eq a) => a -> [a]
-fib x = undefined
+fib x
+    | x == 0 = [0]
+    | x == 1 = [1, 0]
+    | otherwise = (u + p):all
+    where all@(u:p:_) = fib (x - 1)
 
 -- This is not recursive, but have a go anyway.
 -- Create a function which takes two parameters, a number and a step
@@ -18,7 +27,9 @@ fib x = undefined
 --			    stepReverseSign -3 1 = 4
 --			    stepReverseSign 1 2 = -3
 stepReverseSign :: (Fractional a, Ord a) => a -> a -> a
-stepReverseSign a = undefined
+stepReverseSign x y
+    | x < 0 =  y - x
+    | otherwise = (-(x + y))
 
 {- Lets calculate pi.
  - The Leibniz formula for pi (http://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80)
@@ -52,8 +63,11 @@ stepReverseSign a = undefined
  -}
 
 piCalc :: (Fractional a, Integral b, Ord a) => a -> (a, b)
-piCalc a = undefined
+piCalc tol = piCalc' 1 0.0 tol 0
 
 piCalc' :: (Ord a, Fractional a, Integral b) => a -> a -> a -> b -> (a, b)
-piCalc' w x y z = undefined
+piCalc' den cal tol n
+     | abs (cal - cal') <= tol = (cal', n + 1)
+     | otherwise = piCalc' (stepReverseSign den 2) cal' tol (n + 1)
+     where cal' = cal + 4 / den
 
