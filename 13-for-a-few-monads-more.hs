@@ -27,14 +27,35 @@
  - 5 is greater than 4
  - 5 is equal to 5
  -}
+import Control.Monad.Writer
+import Data.Monoid
 
 describe :: (Show a, Eq a, Ord a) => a -> a -> [String]
-describe x y = undefined
+describe x y
+    | x > y = pure $ show x ++ " is greater than " ++ (show y)
+    | x < y = pure $ show x ++ " is less than " ++ (show y)
+    | otherwise = pure $ show x ++ " is equal to " ++ (show y)
 
 binarySearch :: (Show a, Ord a, Eq a, Monoid b) => (a -> a -> b) -> a -> [a] -> Writer b Bool
-binarySearch = undefined
+binarySearch _des _x [] = return False
+binarySearch des x xs
+    | x < y = do
+                 tell d
+                 binarySearch des x $ take i xs
+    | x > y = do
+                 tell d
+                 binarySearch des x $ drop (i + 1) xs
+    | otherwise = do
+                     tell d
+                     return True
+    where i = length xs `quot` 2
+          y = xs !! i
+          d = des x y
 
 {-
  - Investigate what other functions instead of describe can be passed to the binary search.
  - Is it possible to provide a function, so that when we do the binary search we can return a count of how many comparisons the algorithm took?
  -}
+
+step :: a -> a -> Sum Int
+step _x _y = return 1
